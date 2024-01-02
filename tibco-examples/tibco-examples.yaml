@@ -9,3 +9,4 @@ spec:
     - ./docs-system/catalog-info.yaml
     - ./docs-template/docs-template.yaml
     - ./flogo-sample-template/flogo-sample-template.yaml
+    - ./catalog-info.yaml

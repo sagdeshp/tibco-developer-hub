@@ -15,6 +15,7 @@
     "clean": "backstage-cli package clean"
   },
   "dependencies": {
+    "@axis-backstage/plugin-jira-dashboard-backend": "^0.2.0",
     "@backstage/backend-common": "^0.19.1",
     "@backstage/backend-tasks": "^0.5.4",
     "@backstage/catalog-client": "^1.4.3",
