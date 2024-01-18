@@ -1,5 +1,5 @@
 # Stage 1 - Create yarn install skeleton layer
-FROM --platform=$BUILDPLATFORM node:16-bullseye-slim AS packages
+FROM --platform=$BUILDPLATFORM node:18-bullseye-slim AS packages
 
 WORKDIR /app
 COPY package.json yarn.lock ./
@@ -12,7 +12,7 @@ COPY plugins plugins
 RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {} \+
 
 # Stage 2 - Install dependencies and build packages
-FROM --platform=$BUILDPLATFORM node:16-bullseye-slim AS build
+FROM --platform=$BUILDPLATFORM node:18-bullseye-slim AS build
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -42,7 +42,7 @@ RUN mkdir packages/backend/dist/skeleton packages/backend/dist/bundle \
     && tar xzf packages/backend/dist/bundle.tar.gz -C packages/backend/dist/bundle
 
 # Stage 3 - Build the actual backend image and install production dependencies
-FROM --platform=$TARGETPLATFORM node:16-bullseye-slim
+FROM --platform=$TARGETPLATFORM node:18-bullseye-slim
 
 # Install sqlite3 dependencies. You can skip this if you don't use sqlite3 in the image,
 # in which case you should also move better-sqlite3 to "devDependencies" in package.json.
@@ -56,7 +56,7 @@ FROM --platform=$TARGETPLATFORM node:16-bullseye-slim
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && \
-    apt-get install -y --no-install-recommends python3 g++ build-essential python3-pip && \
+    apt-get install -y --no-install-recommends python3 g++ build-essential python3-pip curl && \
     yarn config set python /usr/bin/python3
 
 RUN pip3 install mkdocs-techdocs-core==1.1.7
@@ -91,6 +91,6 @@ ENV NODE_ENV production
 ENV HUB_CONFIGFILE "app-config.production.yaml"
 
 ARG BID
-ENV APP_CONFIG_app_buildVersion="${BID}"
+ENV APP_CONFIG_app_buildInfo_version="${BID}"
 
 CMD node packages/backend --config "${HUB_CONFIGFILE}"
