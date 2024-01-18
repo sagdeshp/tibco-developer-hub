@@ -90,7 +90,9 @@ async function main() {
   const searchEnv = useHotMemoize(module, () => createEnv('search'));
   const appEnv = useHotMemoize(module, () => createEnv('app'));
   const healthcheckEnv = useHotMemoize(module, () => createEnv('healthcheck'));
-  const jiraDashboardEnv = useHotMemoize(module, () => createEnv('jira-dashboard'));
+  const jiraDashboardEnv = useHotMemoize(module, () =>
+    createEnv('jira-dashboard'),
+  );
   /*  const authMiddleware = await createAuthMiddleware(config);
 
   const apiRouter = Router();
